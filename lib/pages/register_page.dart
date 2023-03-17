@@ -47,7 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
   final GlobalKey<FormState> textKey = GlobalKey<FormState>();
-   final GlobalKey<FormState> buttonKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> buttonKey = GlobalKey<FormState>();
 
   final email = TextEditingController();
   final nama = TextEditingController();
