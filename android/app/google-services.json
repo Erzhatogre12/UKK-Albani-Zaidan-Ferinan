@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "149854079733",
+    "project_id": "dbpengaduan",
+    "storage_bucket": "dbpengaduan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149854079733:android:3a1fa76f440c17e18f93bc",
+        "android_client_info": {
+          "package_name": "com.example.app_pengaduan_masyarakat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "149854079733-pt7bbg556gh925k9250gg5ik868ftdq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIxBpWYiaTfqrne5N_b1KXyNRaysrEuLE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "149854079733-pt7bbg556gh925k9250gg5ik868ftdq4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
