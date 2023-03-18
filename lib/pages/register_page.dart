@@ -4,7 +4,6 @@ import 'package:app_pengaduan_masyarakat/widgets/input_text_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
@@ -13,7 +12,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-   singup() async {
+  singup() async {
     print('try 1');
     try {
       print('try 2');
@@ -32,7 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
           context,
         );
         print('masuk semua');
-   
+
         // ignore: use_build_context_synchronously
         Navigator.push(
           context,
@@ -42,10 +41,10 @@ class _RegisterPageState extends State<RegisterPage> {
         );
       });
     } catch (error) {
-    
       print(error);
     }
   }
+
   final GlobalKey<FormState> textKey = GlobalKey<FormState>();
   final GlobalKey<FormState> buttonKey = GlobalKey<FormState>();
 
@@ -55,121 +54,117 @@ class _RegisterPageState extends State<RegisterPage> {
   final noTelp = TextEditingController();
   final password = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         color: Colors.white,
         padding: const EdgeInsets.all(16),
-        child: 
-        Column(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
-              child: ListView(
-                children: [
-                  Column(
-                    children: [
-                      Form(
-                        key: textKey,
-                        child: Column(
-                          children: [
-                            InputTextAuth(
+                child: ListView(
+              children: [
+                Column(
+                  children: [
+                    Form(
+                      key: textKey,
+                      child: Column(
+                        children: [
+                          InputTextAuth(
                             controller: email,
                             placeholder: 'email',
                             keyboardType: TextInputType.emailAddress,
                             obscureText: false,
                             validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Email belum terisi';
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                             InputTextAuth(
+                              if (value == null || value.isEmpty) {
+                                return 'Email belum terisi';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          InputTextAuth(
                             controller: password,
                             placeholder: 'password',
                             keyboardType: TextInputType.text,
                             obscureText: false,
                             validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'password belum terisi';
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                             InputTextAuth(
+                              if (value == null || value.isEmpty) {
+                                return 'password belum terisi';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          InputTextAuth(
                             controller: nik,
                             placeholder: 'nik',
                             keyboardType: TextInputType.number,
                             obscureText: false,
                             validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'NIK belum terisi';
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            InputTextAuth(
+                              if (value == null || value.isEmpty) {
+                                return 'NIK belum terisi';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          InputTextAuth(
                             controller: nama,
                             placeholder: 'nama',
                             keyboardType: TextInputType.text,
                             obscureText: false,
                             validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Nama belum terisi';
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                           InputTextAuth(
+                              if (value == null || value.isEmpty) {
+                                return 'Nama belum terisi';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          InputTextAuth(
                             controller: noTelp,
                             placeholder: 'No Telp',
                             keyboardType: TextInputType.number,
                             obscureText: false,
                             validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'No Telp belum terisi';
-                                }
-                                return null;
-                              },
-                            ), 
+                              if (value == null || value.isEmpty) {
+                                return 'No Telp belum terisi';
+                              }
+                              return null;
+                            },
+                          ),
                         ],
                       ),
-                      ),
-                      ElevatedButton(
-                      key: buttonKey, 
+                    ),
+                    ElevatedButton(
+                      key: buttonKey,
                       onPressed: () async {
                         if (textKey.currentState!.validate()) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Processing Data')
-                              ),
-                            );
-                            print('data semua sudah terisi');
-                            await singup();
-                            print('data berhasil di masukan ke firebase');
-                          }
-                      }, 
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Processing Data')),
+                          );
+                          print('data semua sudah terisi');
+                          await singup();
+                          print('data berhasil di masukan ke firebase');
+                        }
+                      },
                       child: Text('Register'),
-                      ),
-                    ],
-                  ),
-                ],
-              )
-              ),
+                    ),
+                  ],
+                ),
+              ],
+            )),
           ],
         ),
       ),

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -30,7 +29,7 @@ class InputTextAuth extends StatelessWidget {
           color: Colors.black,
           fontSize: 20,
         ),
-        cursorColor:Colors.black,
+        cursorColor: Colors.black,
         decoration: InputDecoration(
           hintText: '$placeholder',
           hintStyle: TextStyle(

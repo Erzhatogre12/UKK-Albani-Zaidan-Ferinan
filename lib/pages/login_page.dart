@@ -22,50 +22,47 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> textLogKey = GlobalKey<FormState>();
   final GlobalKey<FormState> buttonLogKey = GlobalKey<FormState>();
 
-   void login() {
-    FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email.text, password: password.text)
+  void login() async {
+    final UserCredential value =
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email.text,
+      password: password.text,
+    );
+    await FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: value.user!.uid)
+        .get()
         .then(
-      (value) {
-        FirebaseFirestore.instance
-            .collection('users')
-            .where('uid', isEqualTo: value.user!.uid)
-            .get()
-            .then(
-          (docs) {
-            if (docs.docs.isNotEmpty) {
-              if (docs.docs.first.get('role') == 'Masyarakat') {
-                print('Role Masyarakat');
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const MasyarakatPage(),
-                  ),
-                );
-              }
-            } else if (docs.docs.isNotEmpty) {
-              if (docs.docs.first.get('role') == 'Admin') {
-                print('Role Admin');
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const AdminPage(),
-                  ),
-                );
-              }
-            } else if (docs.docs.isNotEmpty) {
-              if (docs.docs.first.get('role') == 'Petugas') {
-                print('Role Petugas');
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const PetugasPage(),
-                  ),
-                );
-              }
-            }
-          },
-        );
+      (docs) {
+        if (docs.docs.isNotEmpty) {
+          if (docs.docs.first.get('role') == 'Masyarakat') {
+            print('role Masyarakat');
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const MasyarakatPage(),
+              ),
+            );
+          } else if (docs.docs.first.get('role') == 'Admin') {
+            print('role Admin');
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const AdminPage(),
+              ),
+            );
+          } else if (docs.docs.first.get('role') == 'Petugas') {
+            print('role Petugas');
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const PetugasPage(),
+              ),
+            );
+          } else {
+            print('not called');
+          }
+        }
       },
     );
   }
@@ -81,9 +78,16 @@ class _LoginPageState extends State<LoginPage> {
           .then((user) {
         print('try 2');
         login();
-        print('selesai');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Berhasil Masuk')),
+        );
       });
     } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Password Atau Email Salah'),
+        ),
+      );
       print(e);
     }
   }
@@ -100,8 +104,6 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -122,10 +124,10 @@ class _LoginPageState extends State<LoginPage> {
                         child: Column(
                           children: [
                             InputTextAuth(
-                              controller: email, 
-                              placeholder: 'Email', 
-                              keyboardType: TextInputType.emailAddress, 
-                              obscureText: false, 
+                              controller: email,
+                              placeholder: 'Email',
+                              keyboardType: TextInputType.emailAddress,
+                              obscureText: false,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Email belum terisi';
@@ -133,14 +135,14 @@ class _LoginPageState extends State<LoginPage> {
                                 return null;
                               },
                             ),
-                           const SizedBox(
-                            height: 10,
-                           ),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             InputTextAuth(
-                              controller: password, 
-                              placeholder: 'Password', 
-                              keyboardType: TextInputType.text, 
-                              obscureText: true, 
+                              controller: password,
+                              placeholder: 'Password',
+                              keyboardType: TextInputType.text,
+                              obscureText: true,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Password belum terisi';
@@ -154,16 +156,14 @@ class _LoginPageState extends State<LoginPage> {
                       ElevatedButton(
                         key: buttonLogKey,
                         onPressed: () async {
-                        if (textLogKey.currentState!.validate()) {
+                          if (textLogKey.currentState!.validate()) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Processing Data')
-                              ),
+                              const SnackBar(content: Text('Processing Data')),
                             );
                             print('data semua sudah terisi');
-                            login();
-                            print('data berhasil di masukan ke firebase');
+                            signIn(context);
                           }
-                      }, 
+                        },
                         child: Text('Log In'),
                       ),
                     ],
