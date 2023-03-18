@@ -76,8 +76,12 @@ class _ListUserPageState extends State<ListUserPage> {
             children: [
               Column(
                 children: [
-                  SizedBox(
-                    height: 150,
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.arrow_back_ios_new),
+                  ),
+                  const SizedBox(
+                    height: 100,
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -89,11 +93,12 @@ class _ListUserPageState extends State<ListUserPage> {
                     },
                     child: Text('Tambah User'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 50,
                   ),
-                  SizedBox(
+                  Container(
                     height: 500,
+                    padding: const EdgeInsets.all(4),
                     child: ListView.builder(
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
@@ -139,13 +144,12 @@ class _ListUserPageState extends State<ListUserPage> {
                                           fontWeight: FontWeight.w400),
                                     ),
                                   ),
-                                 
-                                ], 
+                                ],
                               ),
                             ),
                             const SizedBox(
-                                    height: 10,
-                                  )
+                              height: 10,
+                            )
                           ],
                         );
                         // Text('${userData['nama'] ?? ''}');

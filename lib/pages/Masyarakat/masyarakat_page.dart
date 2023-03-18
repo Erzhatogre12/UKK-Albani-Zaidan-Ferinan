@@ -3,14 +3,18 @@ import 'dart:developer';
 import 'package:app_pengaduan_masyarakat/controller/get_data_management.dart';
 import 'package:app_pengaduan_masyarakat/pages/Masyarakat/buat_pengaduan.dart';
 import 'package:app_pengaduan_masyarakat/pages/login_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MasyarakatPage extends StatefulWidget {
-  const MasyarakatPage({super.key});
+  const MasyarakatPage({Key? key}) : super(key:key);
+  
+
 
   @override
   State<MasyarakatPage> createState() => _MasyarakatPageState();
@@ -21,9 +25,23 @@ class _MasyarakatPageState extends State<MasyarakatPage> {
 
   Map<String, String?> userData = {};
 
+  // CollectionReference reference = FirebaseFirestore.instance.collection('pengaduan');
+
+ late  Stream<QuerySnapshot> stream;
+ late Future<DocumentSnapshot> futureData;
+
+ late Map data;
+
+late DocumentReference reference;
+
+late String id;
+
   void getAllData() async {
     final data = await getData.dataUser();
     setState(() {
+      reference = FirebaseFirestore.instance.collection('pengaduan').doc(id);
+
+      futureData = reference.get();
       userData = data;
     });
   }
@@ -147,32 +165,30 @@ class _MasyarakatPageState extends State<MasyarakatPage> {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {},
-                            child: Container(
-                              height: 60,
-                              padding: EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 1,
-                                  style: BorderStyle.solid,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Judul',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_right,
-                                  ),
-                                ],
-                              ),
-                            ),
+                            child:  FutureBuilder<DocumentSnapshot>(
+        future: futureData,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Some error occurred ${snapshot.error}'));
+          }
+
+          if (snapshot.hasData) {
+            //Get the data
+            DocumentSnapshot documentSnapshot = snapshot.data;
+            data = documentSnapshot.data() as Map;
+
+            //display the data
+            return Column(
+              children: [
+                Text('${data['judul']}'),
+                Text('${data['isi']}'),
+              ],
+            );
+          }
+
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
                           );
                         },
                       ),

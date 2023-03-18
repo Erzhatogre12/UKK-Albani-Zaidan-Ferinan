@@ -31,3 +31,12 @@ class GetDataManagement {
     }
   }
 }
+
+class GetDataPengaduan {
+  String? judul;
+  String? isi;
+  String? status;
+  String? image;
+
+  
+}

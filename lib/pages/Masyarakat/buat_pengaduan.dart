@@ -1,15 +1,12 @@
-import 'package:app_pengaduan_masyarakat/pages/Admin/admin_page.dart';
+import 'dart:io';
+
 import 'package:app_pengaduan_masyarakat/pages/Masyarakat/masyarakat_page.dart';
-import 'package:app_pengaduan_masyarakat/pages/Petugas/petugas_page.dart';
-import 'package:app_pengaduan_masyarakat/pages/register_page.dart';
 import 'package:app_pengaduan_masyarakat/widgets/input_text_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class BuatPengaduan extends StatefulWidget {
   const BuatPengaduan({Key? key}) : super(key: key);
@@ -22,8 +19,30 @@ class _BuatPengaduanState extends State<BuatPengaduan> {
   final judul = TextEditingController();
   final isiPengaduan = TextEditingController();
 
-  final GlobalKey<FormState> textLogKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> textKey = GlobalKey<FormState>();
   final GlobalKey<FormState> buttonLogKey = GlobalKey<FormState>();
+
+  CollectionReference reference =
+      FirebaseFirestore.instance.collection('pengaduan');
+
+  String imageUrl = '';
+
+  void _submitForm() async {
+    Map<String, String> dataToSend = {
+      'judul': judul.text,
+      'isi': isiPengaduan.text,
+      'image': imageUrl,
+      'status': 'Pending'
+    };
+
+    reference.add(dataToSend);
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const MasyarakatPage(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +59,24 @@ class _BuatPengaduanState extends State<BuatPengaduan> {
                   Column(
                     children: [
                       Form(
-                        key: textLogKey,
+                        key: textKey,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const MasyarakatPage(),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.arrow_back_ios_new),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
                             InputTextAuth(
                               controller: judul,
                               placeholder: 'Judul',
@@ -62,7 +96,7 @@ class _BuatPengaduanState extends State<BuatPengaduan> {
                               controller: isiPengaduan,
                               placeholder: 'Isi',
                               keyboardType: TextInputType.text,
-                              obscureText: true,
+                              obscureText: false,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Isi pengaduan belum terisi';
@@ -74,9 +108,33 @@ class _BuatPengaduanState extends State<BuatPengaduan> {
                         ),
                       ),
                       InkWell(
-                        onTap: () {
+                        onTap: () async {
                           ImagePicker imagePicker = ImagePicker();
-                          imagePicker.pickImage(source: ImageSource.camera);
+                          XFile? file = await imagePicker.pickImage(
+                              source: ImageSource.camera);
+                          print('${file?.path}');
+
+                          if (file == null) return;
+
+                          String fileName =
+                              DateTime.now().millisecondsSinceEpoch.toString();
+
+                          Reference referenceRoot =
+                              FirebaseStorage.instance.ref();
+                          Reference referenceDirImages =
+                              referenceRoot.child('images');
+
+                          Reference referenceImageToUpload =
+                              referenceDirImages.child(fileName);
+                          try {
+                            await referenceImageToUpload
+                                .putFile(File(file.path));
+                            imageUrl =
+                                await referenceImageToUpload.getDownloadURL();
+                                print(imageUrl);
+                          } catch (error) {
+                            print(error);
+                          }
                         },
                         child: Container(
                           height: 50,
@@ -91,8 +149,14 @@ class _BuatPengaduanState extends State<BuatPengaduan> {
                       ElevatedButton(
                         key: buttonLogKey,
                         onPressed: () async {
-                          if (textLogKey.currentState!.validate()) {
-
+                          if (textKey.currentState!.validate()) {
+                            if (imageUrl.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content: Text(
+                                      'Tolong Upload Foto terlebih dahulu')));
+                            }
+                            _submitForm();
+                            print('dapet $imageUrl');
                             print('data semua sudah terisi');
                           }
                         },
