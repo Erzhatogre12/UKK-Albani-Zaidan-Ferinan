@@ -3,6 +3,7 @@ import 'package:app_pengaduan_masyarakat/pages/login_page.dart';
 import 'package:app_pengaduan_masyarakat/widgets/input_text_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -91,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             controller: password,
                             placeholder: 'password',
                             keyboardType: TextInputType.text,
-                            obscureText: false,
+                            obscureText: true,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'password belum terisi';
@@ -161,6 +162,31 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                       child: Text('Register'),
                     ),
+                    Row(
+                        children: [
+                          Text(
+                            'Dah Punya Akun?',
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginPage(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Log In',
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
                   ],
                 ),
               ],

@@ -32,7 +32,7 @@ class InputTextAuth extends StatelessWidget {
         cursorColor: Colors.black,
         decoration: InputDecoration(
           hintText: '$placeholder',
-          hintStyle: TextStyle(
+          hintStyle: GoogleFonts.poppins(
             fontSize: 20,
             color: Colors.black.withAlpha(100),
           ),

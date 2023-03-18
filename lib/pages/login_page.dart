@@ -1,12 +1,14 @@
 import 'package:app_pengaduan_masyarakat/pages/Admin/admin_page.dart';
 import 'package:app_pengaduan_masyarakat/pages/Masyarakat/masyarakat_page.dart';
 import 'package:app_pengaduan_masyarakat/pages/Petugas/petugas_page.dart';
+import 'package:app_pengaduan_masyarakat/pages/register_page.dart';
 import 'package:app_pengaduan_masyarakat/widgets/input_text_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -76,8 +78,9 @@ class _LoginPageState extends State<LoginPage> {
         password: password.text,
       )
           .then((user) {
+            login();
         print('try 2');
-        login();
+        
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Berhasil Masuk')),
         );
@@ -166,6 +169,31 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         child: Text('Log In'),
                       ),
+                      Row(
+                        children: [
+                          Text(
+                            'Belum Punya Akun?',
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => const RegisterPage(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Register',
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
                     ],
                   )
                 ],

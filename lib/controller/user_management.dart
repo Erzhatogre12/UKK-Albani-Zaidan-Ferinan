@@ -24,13 +24,53 @@ class UserManagement {
     ).then(
       (value) {
         print('data masuk $value');
-        Navigator.pop(context);
-        Navigator.pushReplacement(
-          context,
-          CupertinoPageRoute(
-            builder: (_) => const LoginPage(),
-          ),
-        );
+        // Navigator.pop(context);
+        // Navigator.pushReplacement(
+        //   context,
+        //   CupertinoPageRoute(
+        //     builder: (_) => const LoginPage(),
+        //   ),
+        // );
+      },
+    );
+  }
+}
+
+class UserCreateManagement {
+   String? _selectedRole;
+  var useRole = '';
+
+  createNewUser(
+    nama,
+    nik,
+    noTelp,
+    context,
+  ) {
+    void _addRole() async {
+    if (_selectedRole != null) {
+      final firebaseFirestore = FirebaseFirestore.instance;
+      final documentReference = firebaseFirestore.collection('users').doc();
+      final data = {'role': _selectedRole};
+      await documentReference.set(data);
+    }
+  }
+    FirebaseFirestore.instance.collection('users').add(
+      {
+        'nama': nama,
+        'nik': nik,
+        'role': _selectedRole,
+        'noTelp': noTelp,
+      },
+    ).then(
+      (value) {
+        print('data masuk $value');
+        // Navigator.pop(context);
+        // Navigator.pushReplacement(
+        //   context,
+        //   CupertinoPageRoute(
+        //     builder: (_) => const LoginPage(),
+        //   ),
+        // );
       },
     );
   }
