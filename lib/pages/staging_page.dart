@@ -50,7 +50,7 @@ class _StagingPageState extends State<StagingPage> {
                         height: 45,
                       ),
                       Text(
-                        'Aplikasi Ini dibuat \nuntuk menampung semua \nlaporan anda',
+                        'Aplikasi Ini dibuat \nuntuk menampung semua \npengaduan anda',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.poppins(fontSize: 16),
                       ),
@@ -77,7 +77,12 @@ class _StagingPageState extends State<StagingPage> {
                             ),
                           );
                         },
-                        child: const Text('Login'),
+                        child: Text(
+                          'Login',
+                          style: GoogleFonts.poppins(
+                            fontSize: 18,
+                          ),
+                        ),
                       ),
                       const SizedBox(
                         height: 15,
@@ -87,6 +92,12 @@ class _StagingPageState extends State<StagingPage> {
                         height: 15,
                       ),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(
+                            MediaQuery.of(context).size.width,
+                            50,
+                          ),
+                        ),
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
@@ -95,7 +106,12 @@ class _StagingPageState extends State<StagingPage> {
                             ),
                           );
                         },
-                        child: const Text('Register'),
+                        child: Text(
+                          'Register',
+                          style: GoogleFonts.poppins(
+                            fontSize: 18,
+                          ),
+                        ),
                       ),
                     ],
                   ),

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:app_pengaduan_masyarakat/controller/get_data_management.dart';
 import 'package:app_pengaduan_masyarakat/pages/Masyarakat/buat_pengaduan.dart';
@@ -11,6 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class AdminDashboardPage extends StatefulWidget {
   const AdminDashboardPage({Key? key}) : super(key: key);
@@ -140,6 +144,26 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final pdf = pw.Document();
+
+          pdf.addPage(
+            pw.Page(
+              pageFormat: PdfPageFormat.a4,
+              build: (pw.Context context) {
+                return pw.Center(
+                  child: pw.Text("Hello World"),
+                );
+              },
+            ),
+          );
+          final file = File("example.pdf");
+          await file.writeAsBytes(await pdf.save());
+        },
+        backgroundColor: Colors.blue,
+        child: const Icon(Icons.picture_as_pdf),
+      ),
       body: Container(
         padding: EdgeInsets.all(16),
         color: Colors.white,
@@ -325,6 +349,15 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
                                           fontSize: 16,
                                         ),
                                       ),
+                                       const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        'Nama Pengadu: ${pengaduansData['nama_pengadu']}',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                        ),
+                                      ),
                                       const SizedBox(
                                         height: 5,
                                       ),
@@ -469,8 +502,17 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
                                           fontSize: 16,
                                         ),
                                       ),
+                                        const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        'Nama Pengadu: ${pengaduansDataSudah['nama_pengadu']}',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                        ),
+                                      ),
                                       const SizedBox(
-                                        height: 10,
+                                        height: 5,
                                       ),
                                       Text(
                                         '${pengaduansDataSudah['tanggal']}',

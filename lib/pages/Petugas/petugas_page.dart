@@ -337,6 +337,24 @@ void documentId() async {
                                         ),
                                       ),
                                       const SizedBox(
+                                        height: 5,
+                                      ),
+                                       Text(
+                                        'Nama Pengadu: ${pengaduansData['nama_pengadu']}',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        '${pengaduansData['tanggal']}',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(
                                         height: 10,
                                       ),
                                       Text(
@@ -369,46 +387,45 @@ void documentId() async {
                                         ),
                                       ),
                                       ElevatedButton(
-                                          onPressed: () {
-                                            showDialog<String>(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                title: const Text(
-                                                    'AlertDialog Title'),
-                                                content: Column(
-                                                  children: [
-                                                    Form(
-                                                      key: textKey,
-                                                      child: InputTextAuth(
-                                                        controller:
-                                                            tanggapanCon,
-                                                        placeholder:
-                                                            'Isi Tanggapan anda',
-                                                        keyboardType:
-                                                            TextInputType.text,
-                                                        obscureText: false,
-                                                        validator: (value) {
-                                                          if (value == null ||
-                                                              value.isEmpty) {
-                                                            return 'Password belum terisi';
-                                                          }
-                                                          return null;
-                                                        },
-                                                      ),
+                                        onPressed: () {
+                                          showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                              title: const Text(
+                                                  'AlertDialog Title'),
+                                              content: Column(
+                                                children: [
+                                                  Form(
+                                                    key: textKey,
+                                                    child: InputTextAuth(
+                                                      controller: tanggapanCon,
+                                                      placeholder:
+                                                          'Isi Tanggapan anda',
+                                                      keyboardType:
+                                                          TextInputType.text,
+                                                      obscureText: false,
+                                                      validator: (value) {
+                                                        if (value == null ||
+                                                            value.isEmpty) {
+                                                          return 'Password belum terisi';
+                                                        }
+                                                        return null;
+                                                      },
                                                     ),
-                                                  ],
-                                                ),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.pop(
-                                                            context, 'Cancel'),
-                                                    child: const Text('Cancel'),
                                                   ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                            final updateTanggapan =
+                                                ],
+                                              ),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          context, 'Cancel'),
+                                                  child: const Text('Cancel'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    final updateTanggapan =
                                                         FirebaseFirestore
                                                             .instance
                                                             .collection(
@@ -421,17 +438,19 @@ void documentId() async {
                                                       'status':
                                                           'Sudah Ditanggapi',
                                                     });
-                                                      Navigator.pop(
-                                                          context, 'Tanggapi',);
-                                                    },
-                                                    child:
-                                                        const Text('Tanggapi'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                          child: Text('Tanggapi')),
+                                                    Navigator.pop(
+                                                      context,
+                                                      'Tanggapi',
+                                                    );
+                                                  },
+                                                  child: const Text('Tanggapi'),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                        child: Text('Tanggapi'),
+                                      ),
                                     ],
                                   ),
                                 );
@@ -471,6 +490,24 @@ void documentId() async {
                                         ),
                                       ),
                                       const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        'Nama Pengadu: ${pengaduansDataSudah['nama_pengadu']}',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        '${pengaduansDataSudah['tanggal']}',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(
                                         height: 10,
                                       ),
                                       Text(
@@ -492,6 +529,15 @@ void documentId() async {
                                         maxLines: 2,
                                         style: GoogleFonts.poppins(
                                           fontSize: 14,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Tanggapan: ${pengaduansDataSudah['tanggapan']}',
+                                        softWrap: true,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 12,
                                         ),
                                       ),
                                       ClipRect(

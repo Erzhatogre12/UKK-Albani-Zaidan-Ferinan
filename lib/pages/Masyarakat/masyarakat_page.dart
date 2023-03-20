@@ -18,7 +18,8 @@ class MasyarakatPage extends StatefulWidget {
   State<MasyarakatPage> createState() => _MasyarakatPageState();
 }
 
-class _MasyarakatPageState extends State<MasyarakatPage>  with TickerProviderStateMixin{
+class _MasyarakatPageState extends State<MasyarakatPage>
+    with TickerProviderStateMixin {
   String? id;
 
   final getData = GetDataManagement();
@@ -93,7 +94,7 @@ class _MasyarakatPageState extends State<MasyarakatPage>  with TickerProviderSta
 
   Map<String, dynamic> pengaduanData = {};
   Map<String, dynamic> pengaduanDataSudah = {};
- late TabController tabController;
+  late TabController tabController;
 
   @override
   void initState() {
@@ -252,7 +253,16 @@ class _MasyarakatPageState extends State<MasyarakatPage>  with TickerProviderSta
                       'Pengaduan Anda:',
                       style: GoogleFonts.poppins(fontSize: 18),
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(
+                          MediaQuery.of(context).size.width,
+                          50,
+                        ),
+                      ),
                       onPressed: () {
                         Navigator.pushReplacement(
                           context,
@@ -261,7 +271,12 @@ class _MasyarakatPageState extends State<MasyarakatPage>  with TickerProviderSta
                           ),
                         );
                       },
-                      child: Text('Buat Pegaduan Baru'),
+                      child: Text(
+                        'Buat Pegaduan Baru',
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                        ),
+                      ),
                     ),
                     const SizedBox(
                       height: 20,
@@ -322,6 +337,15 @@ class _MasyarakatPageState extends State<MasyarakatPage>  with TickerProviderSta
                                         height: 5,
                                       ),
                                       Text(
+                                        '${pengaduansData['nama_pengadu']}',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
                                         '${pengaduansData['tanggal']}',
                                         style: GoogleFonts.poppins(
                                           fontSize: 16,
@@ -359,7 +383,6 @@ class _MasyarakatPageState extends State<MasyarakatPage>  with TickerProviderSta
                                               scale: 5),
                                         ),
                                       ),
-                                     
                                     ],
                                   ),
                                 );
@@ -399,9 +422,18 @@ class _MasyarakatPageState extends State<MasyarakatPage>  with TickerProviderSta
                                         ),
                                       ),
                                       const SizedBox(
-                                        height: 10,
+                                        height: 5,
                                       ),
-                                       Text(
+                                      Text(
+                                        '${pengaduansDataSudah['nama_pengadu']}',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
                                         '${pengaduansDataSudah['tanggal']}',
                                         style: GoogleFonts.poppins(
                                           fontSize: 16,
@@ -431,7 +463,7 @@ class _MasyarakatPageState extends State<MasyarakatPage>  with TickerProviderSta
                                           fontSize: 14,
                                         ),
                                       ),
-                                       Text(
+                                      Text(
                                         'Tanggapan: ${pengaduansDataSudah['tanggapan']}',
                                         softWrap: true,
                                         overflow: TextOverflow.ellipsis,

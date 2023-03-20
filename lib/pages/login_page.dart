@@ -80,8 +80,8 @@ class _LoginPageState extends State<LoginPage> {
       print('try 1');
       login();
       print('try 2');
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Berhasil Masuk')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Berhasil Masuk')));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -118,6 +118,8 @@ class _LoginPageState extends State<LoginPage> {
               child: ListView(
                 children: [
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Form(
                         key: textLogKey,
@@ -153,7 +155,16 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                       ),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(
+                            MediaQuery.of(context).size.width,
+                            50,
+                          ),
+                        ),
                         key: buttonLogKey,
                         onPressed: () async {
                           if (textLogKey.currentState!.validate()) {
@@ -164,7 +175,12 @@ class _LoginPageState extends State<LoginPage> {
                             login();
                           }
                         },
-                        child: Text('Log In'),
+                        child: Text(
+                          'Log In',
+                          style: GoogleFonts.poppins(
+                            fontSize: 18,
+                          ),
+                        ),
                       ),
                       Row(
                         children: [

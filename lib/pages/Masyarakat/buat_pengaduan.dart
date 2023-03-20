@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:app_pengaduan_masyarakat/controller/get_data_management.dart';
 import 'package:app_pengaduan_masyarakat/pages/Masyarakat/masyarakat_page.dart';
 import 'package:app_pengaduan_masyarakat/widgets/input_text_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -22,7 +24,15 @@ class _BuatPengaduanState extends State<BuatPengaduan> {
   final GlobalKey<FormState> textKey = GlobalKey<FormState>();
   final GlobalKey<FormState> buttonLogKey = GlobalKey<FormState>();
 
+  final getData = GetDataManagement();
+  Map<String, String?> userData = {};
 
+  void getAllData() async {
+    final data = await getData.dataUser();
+    setState(() {
+      userData = data;
+    });
+  }
 
   CollectionReference reference =
       FirebaseFirestore.instance.collection('pengaduan');
@@ -33,6 +43,7 @@ class _BuatPengaduanState extends State<BuatPengaduan> {
 
   void _submitForm() async {
     Map<String, String> dataToSend = {
+      'nama_pengadu': '${userData['nama']}',
       'judul': judul.text,
       'tanggal': tanggal,
       'isi': isiPengaduan.text,
@@ -48,6 +59,11 @@ class _BuatPengaduanState extends State<BuatPengaduan> {
         builder: (context) => const MasyarakatPage(),
       ),
     );
+  }
+  @override
+  void initState(){
+    super.initState();
+    getAllData();
   }
 
   @override
@@ -153,6 +169,12 @@ class _BuatPengaduanState extends State<BuatPengaduan> {
                         ),
                       ),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                        minimumSize: Size(
+                          MediaQuery.of(context).size.width,
+                          50,
+                        ),
+                      ),
                         key: buttonLogKey,
                         onPressed: () async {
                           if (textKey.currentState!.validate()) {
@@ -166,7 +188,9 @@ class _BuatPengaduanState extends State<BuatPengaduan> {
                             print('data semua sudah terisi');
                           }
                         },
-                        child: Text('Adukan!'),
+                        child: Text('Adukan!', style: GoogleFonts.poppins(
+                          fontSize: 18,
+                        ),),
                       ),
                     ],
                   )

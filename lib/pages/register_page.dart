@@ -148,7 +148,16 @@ class _RegisterPageState extends State<RegisterPage> {
                         ],
                       ),
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: Size(
+                            MediaQuery.of(context).size.width,
+                            50,
+                          ),
+                        ),
                       key: buttonKey,
                       onPressed: () async {
                         if (textKey.currentState!.validate()) {
@@ -160,7 +169,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           print('data berhasil di masukan ke firebase');
                         }
                       },
-                      child: Text('Register'),
+                      child: Text('Register', style: GoogleFonts.poppins(
+                            fontSize: 18,
+                          ),),
                     ),
                     Row(
                         children: [
