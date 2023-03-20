@@ -32,6 +32,18 @@ class _PetugasPageState extends State<PetugasPage>
       userData = data;
     });
   }
+    String? docId;
+void documentId() async {
+    var collection = FirebaseFirestore.instance.collection('pengaduan');
+    var querySnapshots = await collection.get();
+    for (var snapshot in querySnapshots.docs) {
+      var documentID = snapshot.id;
+
+      setState(() {
+        docId = documentID;
+      }); // <-- Document ID
+    }
+  }
 
   Future<Map<String, dynamic>> getPengaduan() async {
     final firebaseFirestore = FirebaseFirestore.instance;
@@ -396,12 +408,19 @@ class _PetugasPageState extends State<PetugasPage>
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      final updateTanggapan = FirebaseFirestore.instance.collection('pengaduan').doc('${pengaduansData['uid']}');
+                                            final updateTanggapan =
+                                                        FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                'pengaduan')
+                                                            .doc(docId);
 
-                                                      updateTanggapan.update({
-                                                        'tanggapan': tanggapanCon.text,
-                                                        'status': 'Sudah Ditanggapi',
-                                                      });
+                                                    updateTanggapan.update({
+                                                      'tanggapan':
+                                                          tanggapanCon.text,
+                                                      'status':
+                                                          'Sudah Ditanggapi',
+                                                    });
                                                       Navigator.pop(
                                                           context, 'Tanggapi',);
                                                     },

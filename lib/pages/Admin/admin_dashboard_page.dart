@@ -34,15 +34,16 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
       userData = data;
     });
   }
-   void documentId() async {
+
+  void documentId() async {
     var collection = FirebaseFirestore.instance.collection('pengaduan');
     var querySnapshots = await collection.get();
     for (var snapshot in querySnapshots.docs) {
-      var documentID = snapshot.id; 
-      
+      var documentID = snapshot.id;
+
       setState(() {
         docId = documentID;
-      });// <-- Document ID
+      }); // <-- Document ID
     }
   }
 
@@ -88,8 +89,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
     });
   }
 
-  
-
   final total = 10;
 
   void logout() async {
@@ -122,7 +121,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
     getAllData();
     getPengaduanData();
     getPengaduanDataSudah();
-  documentId();
+    documentId();
     tabController = TabController(length: 2, vsync: this);
     print('ada ');
   }
@@ -406,12 +405,19 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
                                                 ),
                                                 TextButton(
                                                   onPressed: () {
-                                                              final updateTanggapan = FirebaseFirestore.instance.collection('pengaduan').doc(docId);
+                                                    final updateTanggapan =
+                                                        FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                'pengaduan')
+                                                            .doc(docId);
 
-                                                      updateTanggapan.update({
-                                                        'tanggapan': tanggapanCon.text,
-                                                        'status': 'Sudah Ditanggapi',
-                                                      });
+                                                    updateTanggapan.update({
+                                                      'tanggapan':
+                                                          tanggapanCon.text,
+                                                      'status':
+                                                          'Sudah Ditanggapi',
+                                                    });
                                                     Navigator.pop(
                                                       context,
                                                       'Tanggapi',
