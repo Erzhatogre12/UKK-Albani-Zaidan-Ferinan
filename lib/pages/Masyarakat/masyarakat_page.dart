@@ -18,7 +18,7 @@ class MasyarakatPage extends StatefulWidget {
   State<MasyarakatPage> createState() => _MasyarakatPageState();
 }
 
-class _MasyarakatPageState extends State<MasyarakatPage> {
+class _MasyarakatPageState extends State<MasyarakatPage>  with TickerProviderStateMixin{
   String? id;
 
   final getData = GetDataManagement();
@@ -93,12 +93,15 @@ class _MasyarakatPageState extends State<MasyarakatPage> {
 
   Map<String, dynamic> pengaduanData = {};
   Map<String, dynamic> pengaduanDataSudah = {};
+ late TabController tabController;
 
   @override
   void initState() {
     super.initState();
     getAllData();
     getPengaduanData();
+    getPengaduanDataSudah();
+    tabController = TabController(length: 2, vsync: this);
     print('ada ');
   }
 
@@ -264,71 +267,195 @@ class _MasyarakatPageState extends State<MasyarakatPage> {
                       height: 20,
                     ),
                     SizedBox(
-                      height: 500,
-                      child: ListView.separated(
-                        itemCount: pengaduanData.length,
-                        separatorBuilder: (context, index) => const SizedBox(
-                          height: 10,
-                        ),
-                        itemBuilder: (context, index) {
-                          final pengaduansData = pengaduanData.values
-                              .toList()[index] as Map<String, dynamic>;
-                          return Container(
-                            padding: EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 1,
-                                style: BorderStyle.solid,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${pengaduansData['judul']}',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  '${pengaduansData['isi']}',
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 12,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'Status: ${pengaduansData['status']}',
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                ClipRect(
-                                    clipBehavior: Clip.antiAlias,
-                                    child: Image(
-                                      image: NetworkImage(
-                                          '${pengaduansData['image']}',
-                                          scale: 5),
-                                    )),
-                              ],
-                            ),
-                          );
-                        },
+                      child: TabBar(
+                        controller: tabController,
+                        labelColor: Colors.black,
+                        unselectedLabelColor: Colors.grey,
+                        tabs: const <Widget>[
+                          Tab(
+                            text: 'Status Pending',
+                          ),
+                          Tab(
+                            text: 'Status Ditanggapi',
+                          )
+                        ],
                       ),
-                    )
+                    ),
+                    Container(
+                      height: 500,
+                      width: MediaQuery.of(context).size.width,
+                      child: TabBarView(
+                        controller: tabController,
+                        children: [
+                          SizedBox(
+                            height: 500,
+                            child: ListView.separated(
+                              itemCount: pengaduanData.length,
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(
+                                height: 10,
+                              ),
+                              itemBuilder: (context, index) {
+                                final pengaduansData = pengaduanData.values
+                                    .toList()[index] as Map<String, dynamic>;
+                                return Container(
+                                  padding: EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 1,
+                                      style: BorderStyle.solid,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${pengaduansData['judul']}',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        '${pengaduansData['tanggal']}',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        '${pengaduansData['isi']}',
+                                        softWrap: true,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        'Status: ${pengaduansData['status']}',
+                                        softWrap: true,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      ClipRect(
+                                        clipBehavior: Clip.antiAlias,
+                                        child: Image(
+                                          image: NetworkImage(
+                                              '${pengaduansData['image']}',
+                                              scale: 5),
+                                        ),
+                                      ),
+                                     
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            height: 500,
+                            child: ListView.separated(
+                              itemCount: pengaduanDataSudah.length,
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(
+                                height: 10,
+                              ),
+                              itemBuilder: (context, index) {
+                                final pengaduansDataSudah =
+                                    pengaduanDataSudah.values.toList()[index]
+                                        as Map<String, dynamic>;
+                                return Container(
+                                  padding: EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 1,
+                                      style: BorderStyle.solid,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${pengaduansDataSudah['judul']}',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                       Text(
+                                        '${pengaduansDataSudah['tanggal']}',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        '${pengaduansDataSudah['isi']}',
+                                        softWrap: true,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        'Status: ${pengaduansDataSudah['status']}',
+                                        softWrap: true,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                       Text(
+                                        'Tanggapan: ${pengaduansDataSudah['tanggapan']}',
+                                        softWrap: true,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      ClipRect(
+                                          clipBehavior: Clip.antiAlias,
+                                          child: Image(
+                                            image: NetworkImage(
+                                                '${pengaduansDataSudah['image']}',
+                                                scale: 5),
+                                          )),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 )
               ],

@@ -34,7 +34,7 @@ class _AdminPageState extends State<AdminPage> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    AdminDashBoardPage(),
+    AdminDashboardPage(),
     ListUserPage(),
   ];
 

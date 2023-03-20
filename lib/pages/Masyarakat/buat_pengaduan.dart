@@ -22,14 +22,19 @@ class _BuatPengaduanState extends State<BuatPengaduan> {
   final GlobalKey<FormState> textKey = GlobalKey<FormState>();
   final GlobalKey<FormState> buttonLogKey = GlobalKey<FormState>();
 
+
+
   CollectionReference reference =
       FirebaseFirestore.instance.collection('pengaduan');
 
   String imageUrl = '';
+  final tanggal =
+      '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
 
   void _submitForm() async {
     Map<String, String> dataToSend = {
       'judul': judul.text,
+      'tanggal': tanggal,
       'isi': isiPengaduan.text,
       'image': imageUrl,
       'status': 'Pending',
@@ -132,7 +137,7 @@ class _BuatPengaduanState extends State<BuatPengaduan> {
                                 .putFile(File(file.path));
                             imageUrl =
                                 await referenceImageToUpload.getDownloadURL();
-                                print(imageUrl);
+                            print(imageUrl);
                           } catch (error) {
                             print(error);
                           }

@@ -59,6 +59,20 @@ class _PetugasPageState extends State<PetugasPage>
     return data;
   }
 
+  Future<Map<String, dynamic>> tanggapanUp() async {
+    final firebaseFirestore = FirebaseFirestore.instance;
+    final snapshots = await firebaseFirestore
+        .collection('pengaduan')
+        .where('status', isEqualTo: 'Pending').get();
+    final data = Map<String, dynamic>();
+    snapshots.docs.forEach((doc) {
+      data[doc.id] = doc.data();
+
+    });
+    return data;
+  }
+
+
   void getPengaduanData() async {
     getPengaduan().then((data) {
       setState(() {
@@ -382,6 +396,12 @@ class _PetugasPageState extends State<PetugasPage>
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
+                                                      final updateTanggapan = FirebaseFirestore.instance.collection('pengaduan').doc('${pengaduansData['uid']}');
+
+                                                      updateTanggapan.update({
+                                                        'tanggapan': tanggapanCon.text,
+                                                        'status': 'Sudah Ditanggapi',
+                                                      });
                                                       Navigator.pop(
                                                           context, 'Tanggapi',);
                                                     },
@@ -471,9 +491,7 @@ class _PetugasPageState extends State<PetugasPage>
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                  
                   ],
                 )
               ],
