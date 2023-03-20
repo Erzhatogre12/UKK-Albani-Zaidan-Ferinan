@@ -32,7 +32,8 @@ class _BuatPengaduanState extends State<BuatPengaduan> {
       'judul': judul.text,
       'isi': isiPengaduan.text,
       'image': imageUrl,
-      'status': 'Pending'
+      'status': 'Pending',
+      'tanggapan': '',
     };
 
     reference.add(dataToSend);

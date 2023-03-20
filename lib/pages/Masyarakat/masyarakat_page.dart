@@ -12,37 +12,64 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MasyarakatPage extends StatefulWidget {
-  const MasyarakatPage({Key? key}) : super(key:key);
-  
-
+  const MasyarakatPage({Key? key}) : super(key: key);
 
   @override
   State<MasyarakatPage> createState() => _MasyarakatPageState();
 }
 
 class _MasyarakatPageState extends State<MasyarakatPage> {
+  String? id;
+
   final getData = GetDataManagement();
-
   Map<String, String?> userData = {};
-
-  // CollectionReference reference = FirebaseFirestore.instance.collection('pengaduan');
-
- late  Stream<QuerySnapshot> stream;
- late Future<DocumentSnapshot> futureData;
-
- late Map data;
-
-late DocumentReference reference;
-
-late String id;
 
   void getAllData() async {
     final data = await getData.dataUser();
     setState(() {
-      reference = FirebaseFirestore.instance.collection('pengaduan').doc(id);
-
-      futureData = reference.get();
       userData = data;
+    });
+  }
+
+  Future<Map<String, dynamic>> getPengaduan() async {
+    final firebaseFirestore = FirebaseFirestore.instance;
+    final snapshots = await firebaseFirestore
+        .collection('pengaduan')
+        .where('status', isEqualTo: 'Pending')
+        .get();
+    final data = Map<String, dynamic>();
+    snapshots.docs.forEach((doc) {
+      data[doc.id] = doc.data();
+    });
+    return data;
+  }
+
+  Future<Map<String, dynamic>> getPengaduanSudah() async {
+    final firebaseFirestore = FirebaseFirestore.instance;
+    final snapshots = await firebaseFirestore
+        .collection('pengaduan')
+        .where('status', isEqualTo: 'Sudah Ditanggapi')
+        .get();
+    final data = Map<String, dynamic>();
+    snapshots.docs.forEach((doc) {
+      data[doc.id] = doc.data();
+    });
+    return data;
+  }
+
+  void getPengaduanData() async {
+    getPengaduan().then((data) {
+      setState(() {
+        pengaduanData = data;
+      });
+    });
+  }
+
+  void getPengaduanDataSudah() {
+    getPengaduanSudah().then((data) {
+      setState(() {
+        pengaduanDataSudah = data;
+      });
     });
   }
 
@@ -64,12 +91,27 @@ late String id;
     );
   }
 
+  Map<String, dynamic> pengaduanData = {};
+  Map<String, dynamic> pengaduanDataSudah = {};
+
   @override
   void initState() {
     super.initState();
     getAllData();
+    getPengaduanData();
     print('ada ');
   }
+
+  Future<AggregateQuerySnapshot> count = FirebaseFirestore.instance
+      .collection('pengaduan')
+      .where('status', isEqualTo: 'Pending')
+      .count()
+      .get();
+  Future<AggregateQuerySnapshot> countSudah = FirebaseFirestore.instance
+      .collection('pengaduan')
+      .where('status', isEqualTo: 'Sudah Ditanggapi')
+      .count()
+      .get();
 
   @override
   Widget build(BuildContext context) {
@@ -108,31 +150,97 @@ late String id;
                         ),
                       ],
                     ),
-                    Container(
-                      height: 150,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          color: Colors.grey.withAlpha(50),
-                          borderRadius: BorderRadius.circular(16)),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Total Pengaduan',
-                            style: GoogleFonts.poppins(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 150,
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                                color: Colors.grey.withAlpha(50),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Total Pending',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                FutureBuilder<AggregateQuerySnapshot>(
+                                  future: count,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError) {
+                                      return Text('data hilang');
+                                    }
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      int docCount = snapshot.data!.count;
+                                      return Text(
+                                        docCount.toString(),
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      );
+                                    }
+                                    return CircularProgressIndicator();
+                                  },
+                                ),
+                              ],
                             ),
                           ),
-                          Text(
-                            '$total',
-                            style: GoogleFonts.poppins(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 150,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: Colors.green.withAlpha(50),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          )
-                        ],
-                      ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Total Sudah',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                FutureBuilder<AggregateQuerySnapshot>(
+                                  future: countSudah,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError) {
+                                      return Text('data hilang');
+                                    }
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      int docCount = snapshot.data!.count;
+                                      return Text(
+                                        docCount.toString(),
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      );
+                                    }
+                                    return CircularProgressIndicator();
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 20,
@@ -158,37 +266,65 @@ late String id;
                     SizedBox(
                       height: 500,
                       child: ListView.separated(
-                        itemCount: 10,
+                        itemCount: pengaduanData.length,
                         separatorBuilder: (context, index) => const SizedBox(
                           height: 10,
                         ),
                         itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {},
-                            child:  FutureBuilder<DocumentSnapshot>(
-        future: futureData,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text('Some error occurred ${snapshot.error}'));
-          }
-
-          if (snapshot.hasData) {
-            //Get the data
-            DocumentSnapshot documentSnapshot = snapshot.data;
-            data = documentSnapshot.data() as Map;
-
-            //display the data
-            return Column(
-              children: [
-                Text('${data['judul']}'),
-                Text('${data['isi']}'),
-              ],
-            );
-          }
-
-          return Center(child: CircularProgressIndicator());
-        },
-      ),
+                          final pengaduansData = pengaduanData.values
+                              .toList()[index] as Map<String, dynamic>;
+                          return Container(
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 1,
+                                style: BorderStyle.solid,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${pengaduansData['judul']}',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  '${pengaduansData['isi']}',
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  'Status: ${pengaduansData['status']}',
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                ClipRect(
+                                    clipBehavior: Clip.antiAlias,
+                                    child: Image(
+                                      image: NetworkImage(
+                                          '${pengaduansData['image']}',
+                                          scale: 5),
+                                    )),
+                              ],
+                            ),
                           );
                         },
                       ),

@@ -25,19 +25,6 @@ class _ListUserPageState extends State<ListUserPage> {
     return data;
   }
 
-  final getData = GetDataManagement();
-
-  Map<String, String?> userData = {};
-
-  List<dynamic> userList = [];
-
-  void getAllData() async {
-    final data = await getData.dataUser();
-    setState(() {
-      userData = data;
-    });
-  }
-
   Map<String, dynamic> usersData = {};
 
   @override
@@ -50,18 +37,6 @@ class _ListUserPageState extends State<ListUserPage> {
     });
   }
 
-  fetchDataList() async {
-    final listData = await getData.dataUser();
-    setState(() {
-      userList = listData.values.toList();
-    });
-    // if (resultant == null) {
-    //   print('Unable to retrieve');
-    // } else {
-
-    //   print('ada $resultant');
-    // }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,10 +51,6 @@ class _ListUserPageState extends State<ListUserPage> {
             children: [
               Column(
                 children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.arrow_back_ios_new),
-                  ),
                   const SizedBox(
                     height: 100,
                   ),
@@ -99,7 +70,12 @@ class _ListUserPageState extends State<ListUserPage> {
                   Container(
                     height: 500,
                     padding: const EdgeInsets.all(4),
-                    child: ListView.builder(
+                    child: ListView.separated(
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(
+                          height: 10,
+                        );
+                      },
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
                         final userData = usersData.values.toList()[index]
@@ -146,9 +122,6 @@ class _ListUserPageState extends State<ListUserPage> {
                                   ),
                                 ],
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10,
                             )
                           ],
                         );

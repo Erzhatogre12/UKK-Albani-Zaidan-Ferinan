@@ -1,5 +1,7 @@
 import 'package:app_pengaduan_masyarakat/controller/user_management.dart';
+import 'package:app_pengaduan_masyarakat/model/user_model.dart';
 import 'package:app_pengaduan_masyarakat/pages/Admin/admin_page.dart';
+import 'package:app_pengaduan_masyarakat/pages/Admin/list_user_page.dart';
 import 'package:app_pengaduan_masyarakat/widgets/input_text_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -45,7 +47,9 @@ class _BuatUserPageState extends State<BuatUserPage> {
           'email': email.text,
           'nik': nik.text,
           'noTelp': noTelp.text,
+          'uid': uid,
           'role': _selectedRole,
+          
         };
         await documentReference.set(data);
 
@@ -63,6 +67,7 @@ class _BuatUserPageState extends State<BuatUserPage> {
       }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

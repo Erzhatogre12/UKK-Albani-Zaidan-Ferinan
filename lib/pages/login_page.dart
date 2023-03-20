@@ -25,11 +25,13 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> buttonLogKey = GlobalKey<FormState>();
 
   void login() async {
+    print('ini cek auth FireBase');
     final UserCredential value =
         await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email.text,
       password: password.text,
     );
+    print('ini cek role user');
     await FirebaseFirestore.instance
         .collection('users')
         .where('uid', isEqualTo: value.user!.uid)
@@ -37,6 +39,7 @@ class _LoginPageState extends State<LoginPage> {
         .then(
       (docs) {
         if (docs.docs.isNotEmpty) {
+          print('Mulai');
           if (docs.docs.first.get('role') == 'Masyarakat') {
             print('role Masyarakat');
             Navigator.pushReplacement(
@@ -45,6 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                 builder: (_) => const MasyarakatPage(),
               ),
             );
+            print('berhasil');
           } else if (docs.docs.first.get('role') == 'Admin') {
             print('role Admin');
             Navigator.pushReplacement(
@@ -53,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                 builder: (_) => const AdminPage(),
               ),
             );
+            print('berhasil');
           } else if (docs.docs.first.get('role') == 'Petugas') {
             print('role Petugas');
             Navigator.pushReplacement(
@@ -61,6 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                 builder: (_) => const PetugasPage(),
               ),
             );
+            print('berhasil');
           } else {
             print('not called');
           }
@@ -72,19 +78,10 @@ class _LoginPageState extends State<LoginPage> {
   signIn(context) async {
     try {
       print('try 1');
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-        email: email.text,
-        password: password.text,
-      )
-          .then((user) {
-            login();
-        print('try 2');
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Berhasil Masuk')),
-        );
-      });
+      login();
+      print('try 2');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Berhasil Masuk')));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -164,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                               const SnackBar(content: Text('Processing Data')),
                             );
                             print('data semua sudah terisi');
-                            signIn(context);
+                            login();
                           }
                         },
                         child: Text('Log In'),
